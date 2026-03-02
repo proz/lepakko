@@ -26,25 +26,25 @@ uv sync
 ### Live spectrogram
 
 ```bash
-batsound live recording.wav
-batsound live recording.wav --method spectral-shift --division 10
-batsound live recording.wav --method heterodyne --tune 45000
-batsound live recording.wav --method time-expansion --loop
-batsound live recording.wav --mute  # spectrogram only, no audio
+lepakko live recording.wav
+lepakko live recording.wav --method spectral-shift --division 10
+lepakko live recording.wav --method heterodyne --tune 45000
+lepakko live recording.wav --method time-expansion --loop
+lepakko live recording.wav --mute  # spectrogram only, no audio
 ```
 
 ### File info
 
 ```bash
-batsound info recording.wav
-batsound info /path/to/directory/  # list all WAV files
+lepakko info recording.wav
+lepakko info /path/to/directory/  # list all WAV files
 ```
 
 ### Static spectrogram
 
 ```bash
-batsound spectrogram recording.wav
-batsound spectrogram recording.wav -o output.png --fmin 15000 --fmax 130000
+lepakko spectrogram recording.wav
+lepakko spectrogram recording.wav -o output.png --fmin 15000 --fmax 130000
 ```
 
 ## Hardware

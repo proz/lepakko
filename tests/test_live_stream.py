@@ -4,7 +4,7 @@ import numpy as np
 import soundfile as sf
 import pytest
 
-from batsound.live.stream import ChunkReader
+from lepakko.live.stream import ChunkReader
 
 
 @pytest.fixture

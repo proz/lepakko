@@ -1,8 +1,8 @@
-"""Tests for batsound.analysis module."""
+"""Tests for lepakko.analysis module."""
 
 import numpy as np
 
-from batsound.analysis import bandpass_filter, compute_spectrogram, compute_psd
+from lepakko.analysis import bandpass_filter, compute_spectrogram, compute_psd
 
 
 def _make_signal(

@@ -1,4 +1,4 @@
-"""Tests for batsound.io module."""
+"""Tests for lepakko.io module."""
 
 import tempfile
 from pathlib import Path
@@ -6,7 +6,7 @@ from pathlib import Path
 import numpy as np
 import soundfile as sf
 
-from batsound.io import load_wav, wav_info
+from lepakko.io import load_wav, wav_info
 
 
 def _make_wav(path: Path, sample_rate: int = 250_000, duration: float = 0.1) -> None:

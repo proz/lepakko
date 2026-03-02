@@ -3,7 +3,7 @@
 import numpy as np
 import pytest
 
-from batsound.live.audio_output import (
+from lepakko.live.audio_output import (
     AudioOutput,
     HeterodyneProcessor,
     PhaseVocoderProcessor,

@@ -1,23 +1,23 @@
-"""CLI entry point for BatSound."""
+"""CLI entry point for Lepakko."""
 
 from pathlib import Path
 
 import click
 
-from batsound import __version__
+from lepakko import __version__
 
 
 @click.group()
 @click.version_option(version=__version__)
 def main() -> None:
-    """BatSound - Bat echolocation analysis and acquisition."""
+    """Lepakko - Bat echolocation analysis and acquisition."""
 
 
 @main.command()
 @click.argument("path", type=click.Path(exists=True, path_type=Path))
 def info(path: Path) -> None:
     """Show WAV file metadata."""
-    from batsound.io import load_wav, wav_info
+    from lepakko.io import load_wav, wav_info
 
     if path.is_file():
         meta = wav_info(path)
@@ -47,9 +47,9 @@ def info(path: Path) -> None:
 @click.option("--fmax", type=float, default=130000, help="Max frequency in Hz (default: 130000).")
 def spectrogram(path: Path, output: Path | None, fmin: float, fmax: float) -> None:
     """Generate spectrogram from a WAV file."""
-    from batsound.io import load_wav
-    from batsound.analysis import compute_spectrogram
-    from batsound.visualization import plot_spectrogram
+    from lepakko.io import load_wav
+    from lepakko.analysis import compute_spectrogram
+    from lepakko.visualization import plot_spectrogram
 
     data, sample_rate = load_wav(path)
     freqs, times, sxx = compute_spectrogram(data, sample_rate)
@@ -57,7 +57,10 @@ def spectrogram(path: Path, output: Path | None, fmin: float, fmax: float) -> No
 
 
 @main.command()
-@click.argument("path", type=click.Path(exists=True, path_type=Path))
+@click.argument("path", type=click.Path(exists=True, path_type=Path), required=False)
+@click.option("--mic", is_flag=True, help="Use microphone input instead of file.")
+@click.option("--device", type=str, default=None, help="Audio input device (name or index for --mic).")
+@click.option("--sample-rate", type=int, default=192000, help="Mic sample rate in Hz (default: 192000).")
 @click.option("--fmin", type=float, default=15000, help="Min frequency in Hz (default: 15000).")
 @click.option("--fmax", type=float, default=130000, help="Max frequency in Hz (default: 130000).")
 @click.option("--division", type=int, default=10, help="Frequency division factor (default: 10).")
@@ -75,7 +78,10 @@ def spectrogram(path: Path, output: Path | None, fmin: float, fmax: float) -> No
 @click.option("--loop", is_flag=True, help="Loop the WAV file.")
 @click.option("--mute", is_flag=True, help="Disable audio output.")
 def live(
-    path: Path,
+    path: Path | None,
+    mic: bool,
+    device: str | None,
+    sample_rate: int,
     fmin: float,
     fmax: float,
     division: int,
@@ -88,8 +94,22 @@ def live(
     loop: bool,
     mute: bool,
 ) -> None:
-    """Live scrolling spectrogram with audible frequency-divided output."""
-    from batsound.live.app import run_live
+    """Live scrolling spectrogram with audible frequency-divided output.
+
+    Provide a WAV file path, or use --mic for live microphone input.
+    """
+    if not mic and path is None:
+        raise click.UsageError("Provide a WAV file path or use --mic for microphone input.")
+
+    from lepakko.live.app import run_live
+
+    # Parse device as int if it looks like an index
+    mic_device: int | str | None = None
+    if device is not None:
+        try:
+            mic_device = int(device)
+        except ValueError:
+            mic_device = device
 
     run_live(
         path=path,
@@ -104,4 +124,7 @@ def live(
         nperseg=nperseg,
         loop=loop,
         mute=mute,
+        mic=mic,
+        mic_sr=sample_rate,
+        mic_device=mic_device,
     )
