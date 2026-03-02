@@ -1,0 +1,26 @@
+# Python
+__pycache__/
+*.py[oc]
+build/
+dist/
+wheels/
+*.egg-info
+
+# Virtual environments
+.venv
+
+# Claude
+CLAUDE.md
+.claude/
+
+# macOS
+.DS_Store
+._*
+
+# Project data
+audio/
+data/
+models/
+*.wav
+*.WAV
+*.zc
